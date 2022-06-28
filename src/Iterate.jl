@@ -37,11 +37,11 @@ function iterate(iterator::LevelOrderIterator{T}) where T
   queue = BinaryTreeNode{T}[]
 
   if hasleft(node)
-    push!(queue.baselist, left(node))
+    push!(queue, left(node))
   end
   
   if hasright(node)
-    push!(queue.baselist, right(node))
+    push!(queue, right(node))
   end
   
   return node, queue
@@ -54,11 +54,11 @@ function iterate(::LevelOrderIterator{T}, queue::Vector{BinaryTreeNode{T}}) wher
   current = first(queue)
   
   if hasleft(current)
-    push!(queue.baselist, left(current))
+    push!(queue, left(current))
   end
   
   if hasright(current)
-    push!(queue.baselist, right(current))
+    push!(queue, right(current))
   end
   
   popfirst!(queue)

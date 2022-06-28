@@ -19,4 +19,6 @@ using BinaryTree: hasleft, hasright
   push!(queue, tree.root.right.right.right)
   @show queue
   @show tree
+
+  @show collect(map(BinaryTree.dataof, levelorder(tree)))
 end
