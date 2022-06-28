@@ -1,0 +1,21 @@
+mutable struct AVLTree{T} <: AbstractBinaryTree{T}
+  root::Union{AVLTreeNode{T}, BinaryTreeNil{T}}
+  length::Int
+  compare::Function
+end
+
+AVLTree(T::DataType, compare::Function=-) = AVLTree{T}(BinaryTreeNil(T), 0, compare)
+
+insert!(tree::AVLTree{T}, data::T) where T = begin
+  tree.root = insert_avlnode!(tree.root, data, tree.compare)
+  tree.length += 1
+end
+
+_popvalue!(tree::AVLTree{T}, data::T) where T = begin
+  tree.root = delete_avlnode!(tree.root, data, tree.compare)
+end
+
+# STUB this find twice
+popat!(tree::AVLTree{T}, node::AVLTreeNode{T}) where T = begin
+  _popvalue!(tree, dataof(node), tree.compare)
+end

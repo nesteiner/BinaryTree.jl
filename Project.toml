@@ -1,0 +1,8 @@
+name = "BinaryTree"
+uuid = "9d0778c4-19be-4b9d-a4dc-413ba2c23420"
+authors = ["steiner <steiner3044@163.com>"]
+version = "0.1.0"
+
+[deps]
+LinkedList = "8bb5f1f9-8766-4891-94ae-ce2d9eef0394"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
