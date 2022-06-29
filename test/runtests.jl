@@ -1,9 +1,10 @@
 using BinaryTree, Test, LinkedList
 using BinaryTree: hasleft, hasright
+
 @testset "test tree" begin
   tree = BSTree(Int)
 
-  for i in 1:4
+  for i in 1:50
     insert!(tree, i)
   end
 
@@ -18,7 +19,9 @@ using BinaryTree: hasleft, hasright
   push!(queue, tree.root.right.right)
   push!(queue, tree.root.right.right.right)
   @show queue
-  @show tree
 
-  @show collect(map(BinaryTree.dataof, levelorder(tree)))
+  for node in levelorder(tree)
+    println(node)
+  end
+
 end

@@ -11,7 +11,7 @@ deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
 [[deps.LinkedList]]
-git-tree-sha1 = "c1637f654eba04a1dc9ab586ed466ee809f7aea3"
+git-tree-sha1 = "4f330a934883b35e61bbb9d7ad4d281f64f01791"
 repo-rev = "master"
 repo-url = "https://github.com/nesteiner/LinkedList.jl.git"
 uuid = "8bb5f1f9-8766-4891-94ae-ce2d9eef0394"
