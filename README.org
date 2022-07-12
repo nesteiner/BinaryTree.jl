@@ -1,0 +1,88 @@
+#+title: BinaryTree in Julia
+* BinaryTree
+** Create
+*** BSTree
+#+begin_src julia
+  tree = BSTree(Int)
+#+end_src
+*** AVLTree
+#+begin_src julia
+  tree = AVLTree(Int)
+#+end_src
+** Operation
+*** insert!
+#+begin_src julia
+  for i in 1:50
+    insert!(tree, i)
+  end
+#+end_src
+*** popat!
+#+begin_src julia
+  node = findfirst(isequal(50), tree)
+
+  if !isnothing(node)
+    popat!(tree, node)
+  end
+#+end_src
+*** length
+#+begin_src julia
+  length(tree)
+#+end_src
+*** traveral
+**** levelorder
+#+begin_src julia
+  for node in levelorder(tree)
+    println(dataof(node))
+  end
+#+end_src
+**** preorder
+#+begin_src julia
+  for node in preorder(tree)
+    println(dataof(node))
+  end
+#+end_src
+**** inorder
+#+begin_src julia
+  for node in inorder(tree)
+    println(dataof(node))
+  end
+#+end_src
+**** postorder
+#+begin_src julia
+  for node in postorder(tree)
+    println(dataof(node))
+  end
+#+end_src
+*** search
+#+begin_src julia
+  node = search(tree, 10)
+#+end_src
+*** contains
+#+begin_src julia
+  contains(tree, 10) # true
+  contains(tree, -1) # false
+#+end_src
+*** findfirst
+#+begin_src julia
+  node = findfirst(isequal(50), tree)
+#+end_src
+*** replace!
+#+begin_src julia
+  node = findfirst(isequal(50), tree)
+  if !isnothing(node)
+    replace!(node, -50)
+  end
+#+end_src
+*** 函数式
+**** filter
+#+begin_src julia
+  filter(x -> x % 2 == 0, tree)
+#+end_src
+**** map
+#+begin_src julia
+  array = map(x -> x + 1, tree)
+#+end_src
+**** reduce
+#+begin_src julia
+  reduce(+, tree)
+#+end_src
