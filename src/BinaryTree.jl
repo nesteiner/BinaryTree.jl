@@ -8,7 +8,9 @@ include("TreeNode.jl")
 
 abstract type AbstractBinaryTree{T} end
 
-eltype(::Type{AbstractBinaryTree{T}}) where T = T
+eltype(::Type{<:AbstractBinaryTree{T}}) where T = T
+eltype(::Type{Base.Iterators.Filter{F, V}}) where {F, V} = eltype(V)
+
 length(tree::AbstractBinaryTree) = tree.length
 
 keys(tree::AbstractBinaryTree{T}) where T = LevelOrderIterator{T}(tree.root, length(tree))
@@ -57,8 +59,9 @@ show(io::IO, tree::AbstractBinaryTree) = begin
   end
 end
 
-filter(testf::Function, tree::AbstractBinaryTree{T}) where T = 
+filter(testf::Function, tree::AbstractBinaryTree{T}) where T = begin
   Iterators.filter(testf, tree) |> collect
+end
 
 function search(value::T, tree::AbstractBinaryTree{T}) where T
   compare = tree.compare
@@ -159,7 +162,7 @@ function search(tree::AbstractBinaryTree{T}, target::T) where T
     end
   end
 
-  return current                # now return nil
+  return isnil(current) ? nothing : current                # now return nil
 end
 
 function contains(tree::AbstractBinaryTree{T}, data::T) where T
@@ -182,13 +185,13 @@ function contains(tree::AbstractBinaryTree{T}, data::T) where T
 end
 
 include("Iterate.jl")
-
 include("BSTree.jl")
-
 include("AVLTree.jl")
+
+
 export BSTree, BinaryTreeNode, insert!, popat!,
   length, levelorder, preorder, inorder, postorder, dataof,
-  left, right, isleaf, isnil, search, findnode
+  left, right, isleaf, isnil, search
 
 export AVLTree
 end
