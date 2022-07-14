@@ -15,7 +15,7 @@ git-tree-sha1 = "4f330a934883b35e61bbb9d7ad4d281f64f01791"
 repo-rev = "master"
 repo-url = "https://github.com/nesteiner/LinkedList.jl.git"
 uuid = "8bb5f1f9-8766-4891-94ae-ce2d9eef0394"
-version = "0.1.0"
+version = "0.2.0"
 
 [[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
