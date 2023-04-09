@@ -82,7 +82,7 @@ function search(value::T, tree::AbstractBinaryTree{T}) where T
   
 end
 
-function popat!(tree::AbstractBinaryTree{T}, data::T)::Bool where T
+function popat!(tree::AbstractBinaryTree{T}, data::T) where T
   tree.length -= 1
   parent = nothing
   current = tree.root

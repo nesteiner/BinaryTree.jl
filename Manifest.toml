@@ -1,7 +1,8 @@
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.7.2"
+julia_version = "1.8.5"
 manifest_format = "2.0"
+project_hash = "cbe58ab4b7f588525bcacb4c04968fc07df9e565"
 
 [[deps.Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
@@ -11,7 +12,8 @@ deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
 [[deps.LinkedList]]
-git-tree-sha1 = "4f330a934883b35e61bbb9d7ad4d281f64f01791"
+deps = ["Test"]
+git-tree-sha1 = "d3ae88d0fd774c1fab6e6755557229b3f2e51d02"
 repo-rev = "master"
 repo-url = "https://github.com/nesteiner/LinkedList.jl.git"
 uuid = "8bb5f1f9-8766-4891-94ae-ce2d9eef0394"
@@ -30,6 +32,7 @@ uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
+version = "0.7.0"
 
 [[deps.Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"

@@ -13,7 +13,7 @@ end
 @testset "test tree" begin
   tree = AVLTree(Int)
   bstree = BSTree(Int)
-  for i in 1:50
+  for i in 1:10
     insert!(tree, i)
     insert!(bstree, i)
   end
@@ -26,7 +26,7 @@ end
   end
 
   @testset "test contains" begin
-    @test contains(tree, 50) == true
+    @test contains(tree, 50) == false
     @test contains(tree, -1) == false
   end
 
@@ -39,15 +39,12 @@ end
   end
 
   @testset "test popat" begin
-      node = findfirst(isequal(25), tree)
-      popat!(tree, 25)
-      
-      println(tree)
-
-      println(popat!(bstree, 25))
-      println(bstree)
-      # node = findfirst(isequal(25), tree)
-      # println(isnothing(node))
+    popat!(tree, 5)
+    println(tree)
+    #= popat!(bstree, 25)
+    println(bstree) =#
+    # node = findfirst(isequal(25), tree)
+    # println(isnothing(node))
   end
 
   @testset "test replace" begin

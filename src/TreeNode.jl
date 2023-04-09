@@ -198,25 +198,27 @@ function delete_avlnode!(node::AVLTreeNode{T}, data::T, compare::Function) where
     node.right = delete_avlnode!(right(node), data, compare)
   else
     if !hasleft(node) || !hasright(node)
-      temp = hasleft(node) ? left(root) : right(node)
+      temp = BinaryTreeNil(T)
+      if isnil(left(node))
+        temp = right(node)
+      else
+        temp = left(node)
+      end
 
-      if !isnil(temp)
+      if isnil(temp)
         temp = node
         node = BinaryTreeNil(T)
       else
         node = temp
       end
     else
-      while hasleft(temp)
-        temp = left(temp)
-      end
-      
+      temp = minValueNode(right(node))
       node.data = dataof(temp)
       node.right = delete_avlnode!(right(node), dataof(temp), compare)
     end
   end
   
-  if !isnil(node)
+  if isnil(node)
     return node
   end
 
@@ -225,6 +227,15 @@ function delete_avlnode!(node::AVLTreeNode{T}, data::T, compare::Function) where
 end
 
 delete_avlnode!(node::BinaryTreeNil{T}, ::T, ::Function) where T = node
+
+function minValudNode(node::AVLTreeNode)
+  current = node
+  while !isnil(left(current))
+    current = left(current)
+  end
+
+  return current
+end
 
 show(io::IO, node::AVLTreeNode) = begin
   print(io, "(data: $(dataof(node)), left: $(left(node)), right: $(right(node)))")
