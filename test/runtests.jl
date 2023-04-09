@@ -1,5 +1,5 @@
 using BinaryTree, Test, LinkedList
-using BinaryTree: hasleft, hasright
+using BinaryTree: hasleft, hasright, popat!
 
 @testset "test tree" begin
   tree = BSTree(Int)
@@ -12,9 +12,10 @@ end
 
 @testset "test tree" begin
   tree = AVLTree(Int)
-  
+  bstree = BSTree(Int)
   for i in 1:50
     insert!(tree, i)
+    insert!(bstree, i)
   end
 
   @testset "test search" begin
@@ -35,6 +36,18 @@ end
 
     node = findfirst(isequal(-1), tree)
     println(isnothing(node) ? "nothing" : BinaryTree.dataof(node))
+  end
+
+  @testset "test popat" begin
+      node = findfirst(isequal(25), tree)
+      popat!(tree, 25)
+      
+      println(tree)
+
+      println(popat!(bstree, 25))
+      println(bstree)
+      # node = findfirst(isequal(25), tree)
+      # println(isnothing(node))
   end
 
   @testset "test replace" begin

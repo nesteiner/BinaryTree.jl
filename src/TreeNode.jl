@@ -224,7 +224,7 @@ function delete_avlnode!(node::AVLTreeNode{T}, data::T, compare::Function) where
   return rebalance!(node)
 end
 
-delete_avlnode!(node::BinaryTreeNil{T}, data::T, compare::Function) where T = node
+delete_avlnode!(node::BinaryTreeNil{T}, ::T, ::Function) where T = node
 
 show(io::IO, node::AVLTreeNode) = begin
   print(io, "(data: $(dataof(node)), left: $(left(node)), right: $(right(node)))")

@@ -1,5 +1,7 @@
 #+title: BinaryTree in Julia
 * BinaryTree
+** Attenion
+不要使用 UnionAll 的泛型
 ** Create
 *** BSTree
 #+begin_src julia
@@ -18,11 +20,7 @@
 #+end_src
 *** popat!
 #+begin_src julia
-  node = findfirst(isequal(50), tree)
-
-  if !isnothing(node)
-    popat!(tree, node)
-  end
+  popat!(tree, value)
 #+end_src
 *** length
 #+begin_src julia

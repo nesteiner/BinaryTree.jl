@@ -16,6 +16,6 @@ end
 # MODULE 修改数据
 # already exists
 # MODULE 查找数据
-findnode(tree::AbstractBinaryTree{T}, data::T) where T = _find_node(tree.root, data, tree.compare)
+# use findfirst!
 # MODULE 转换
 # already exists, using collect(iterate(tree)), collect(preorder(tree)) e.g.

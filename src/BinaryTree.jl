@@ -82,71 +82,64 @@ function search(value::T, tree::AbstractBinaryTree{T}) where T
   
 end
 
-popat!(tree::AbstractBinaryTree, node::BinaryTreeCons) = begin
+function popat!(tree::AbstractBinaryTree{T}, data::T)::Bool where T
   tree.length -= 1
-  tree.root = _popat!(tree, node)
-end
+  parent = nothing
+  current = tree.root
+  del = current
 
-function _popat!(tree::AbstractBinaryTree{T}, node::BinaryTreeCons{T}) where T
-  targetnode = node # target for delete
+  while !isnil(current) && dataof(current) != data
+    result = tree.compare(dataof(current), data)
+    if result > 0
+      parent = current
+      current = left(current)
+    elseif result < 0
+      parent = current
+      current = right(current)
+    end
+  end
 
-  backfather, status = _find_node(tree.root, node.data) 
-  if isnil(backfather)
-    return backfather
+  if isnil(current)
+    return
   end
-  
-  if status == -1
-    targetnode = left(backfather)
-  elseif status == 1
-    targetnode = right(backfather)
-  elseif status == 0
-    targetnode = backfather
-  end
-  
-  # 第一中情况，没有左子树
-  if isnil(left(targetnode))
-    if backfather != targetnode
-      backfather.right = right(targetnode)
+
+  if isnil(left(current))
+    if current == tree.root
+      tree.root = right(current)
+    elseif current == left(parent)
+      parent.left = right(current)
     else
-      tree.root = right(tree.root)
+      parent.right=  right(current)
     end
-    
-    targetnode = BinaryTreeNil(T)
-    return tree.root
-  end
-  
-  # 第二种情况，没有右子树
-  if isnil(right(targetnode))
-    if backfather != targetnode
-      backfather.left = left(targetnode)
+
+    del = current
+  elseif isnil(right(current))
+    if current == tree.root
+      tree.root = left(current)
+    elseif left(parent) == current
+      parent.left == left(current)
     else
-      tree.root = left(tree.root)
+      parent.right = left(current)
     end
-    
-    targetnode = BinaryTreeNil(T)
-    return tree.root
-  end
-  
-  # 第三种情况，有左子树和右子树
-  backfather = targetnode
-  nextnode = left(targetnode)
-  while !isnil(right(nextnode)) 
-    backfather = nextnode
-    nextnode = right(nextnode)
-  end
-  
-  targetnode.data = dataof(nextnode)
-  
-  if left(backfather) == nextnode
-    backfather.left = left(nextnode)
+
+    del = current
   else
-    backfather.right = right(nextnode)
+    _left = right(current)
+    parent = current
+    while !isnil(left(_left))
+      parent = _left
+      _left = left(_left)
+    end
+
+    del = _left
+    current.data = dataof(_left)
+    if (left(parent) == _left)
+      parent.left = right(_left)
+    else
+      parent.right = right(_left)
+    end
   end
-  
-  return tree.root
 end
-
-
 
 function search(tree::AbstractBinaryTree{T}, target::T) where T
   current = tree.root

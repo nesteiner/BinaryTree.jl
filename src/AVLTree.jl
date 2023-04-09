@@ -15,7 +15,6 @@ _popvalue!(tree::AVLTree{T}, data::T) where T = begin
   tree.root = delete_avlnode!(tree.root, data, tree.compare)
 end
 
-# STUB this find twice
-popat!(tree::AVLTree{T}, node::AVLTreeNode{T}) where T = begin
-  _popvalue!(tree, dataof(node), tree.compare)
+popat!(tree::AVLTree{T}, data::T) where T = begin
+  _popvalue!(tree, data)
 end
