@@ -39,7 +39,7 @@ end
   end
 
   @testset "test popat" begin
-    popat!(tree, 5)
+    popat!(tree, 8)
     println(tree)
     #= popat!(bstree, 25)
     println(bstree) =#

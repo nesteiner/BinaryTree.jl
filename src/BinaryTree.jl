@@ -1,6 +1,6 @@
 module BinaryTree
 
-import Base: eltype, show, iterate, insert!, keys, contains, length, popat!, replace!, filter
+import Base: eltype, show, iterate, insert!, keys, contains, length, popat!, replace!, filter, haskey
 import Base.:(==)
 
 using LinkedList

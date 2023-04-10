@@ -42,8 +42,8 @@ left(treenode::BinaryTreeNode) = treenode.left
 right(treenode::BinaryTreeNode) = treenode.right
 isnil(node::BinaryTreeNode) = isa(node, BinaryTreeNil)
 isleaf(treecons::BinaryTreeNode) = isnil(left(treecons)) && isnil(right(treecons))
-hasleft(treecons::BinaryTreeNode) = !isnil(left(treecons))
-hasright(treecons::BinaryTreeNode) = !isnil(right(treecons))
+hasleft(treecons::Union{BinaryTreeNode, AVLTreeNode}) = !isnil(left(treecons))
+hasright(treecons::Union{BinaryTreeNode, AVLTreeNode}) = !isnil(right(treecons))
 
 
 
@@ -62,15 +62,15 @@ end
 
 
 iterate(::BinaryTreeNil) = nothing
-iterate(treecons::BinaryTreeNode) where T = begin
+iterate(node::BinaryTreeNode) where T = begin
   queue = Queue(BinaryTreeNode{T})
   
   if hasleft(node)
-    push!(queue, left(current))
+    push!(queue, left(node))
   end
 
   if hasright(node)
-    push!(queue, right(current))
+    push!(queue, right(node))
   end
 
   return node, queue
@@ -121,33 +121,38 @@ function _find_node(node::BinaryTreeNode{T}, data::T, compare::Function) where T
 end
 
 
-height(::BinaryTreeNil) = -1
-# ATTENTION I think this does matter
-# height(node::AVLTreeNode) = max(height(left(node)), height(right(node))) + 1
+height(::BinaryTreeNil) = 0
 height(node::AVLTreeNode) = node.height
 balanceFactor(::BinaryTreeNil) = 0
 balanceFactor(node::AVLTreeNode) = height(left(node)) - height(right(node))
 
 rotateLeftLeft!(node::AVLTreeNode) = begin
-  leftnode = left(node)
-  node.left = right(leftnode)
-  leftnode.right = node
+  rightnode = right(node)
+  leftnode = left(rightnode)
 
-  # update height
+  rightnode.left = node
+  node.right = leftnode
+
   node.height = max(height(left(node)), height(right(node))) + 1
-  leftnode.height = max(height(left(leftnode)), height(right(leftnode))) + 1
-  return leftnode
+  rightnode.height = max(height(left(rightnode)), height(right(rightnode))) + 1
+
+  return rightnode
 end
 
 rotateRightRight!(node::AVLTreeNode) = begin
-  rightnode = right(node)
-  node.right = left(rightnode)
-  rightnode.left = node
-  
-  # update height
+  leftnode = left(node)
+  @show node
+  @show leftnode
+
+  rightnode = right(leftnode)
+
+  leftnode.right = node
+  node.left = rightnode
+
   node.height = max(height(left(node)), height(right(node))) + 1
-  rightnode.height = max(height(left(rightnode)), height(right(rightnode))) + 1
-  return rightnode
+  leftnode.height = max(height(left(leftnode)), height(right(leftnode))) + 1
+
+  return leftnode
 end
 
 rotateLeftRight!(node::AVLTreeNode) = begin
@@ -165,13 +170,15 @@ rebalance!(node::AVLTreeNode) = begin
   if factor > 1 && balanceFactor(left(node)) > 0
     return rotateRightRight!(node)
   elseif factor > 1 && balanceFactor(left(node)) <= 0
-    node.left = rotateLeftLeft!(left(node))
-    return rotateRightRight!(node)
+    #= node.left = rotateLeftLeft!(left(node))
+    return rotateRightRight!(node) =#
+    return rotateLeftRight!(node)
   elseif factor < -1 && balanceFactor(right(node)) <= 0
     return rotateLeftLeft!(node)
   elseif factor < -1 && balanceFactor(right(node)) > 0
-    node.right = rotateRightRight!(right(node))
-    return rotateLeftLeft!(node)
+    #= node.right = rotateRightRight!(right(node))
+    return rotateLeftLeft!(node) =#
+    return rotateRightLeft!(node)
   else
     return node
   end
@@ -179,19 +186,23 @@ end
 
 insert_avlnode!(::BinaryTreeNil{T}, data::T, compare::Function) where T = AVLTreeNode(data)
 insert_avlnode!(node::AVLTreeNode{T}, data::T, compare::Function) where T = begin
-  if compare(data, dataof(node)) >= 0
+  result = compare(data, dataof(node))
+  if result > 0
     node.right = insert_avlnode!(right(node), data, compare)
-  else
+  elseif result < 0
     node.left = insert_avlnode!(left(node), data, compare)
+  else
+    return node
   end
   
+  node.height = max(height(left(node)), height(right(node))) + 1
   node = rebalance!(node)
   return node
 
 end
 
-function delete_avlnode!(node::AVLTreeNode{T}, data::T, compare::Function) where T
-  result = compare(dataof(node), data)
+function delete_avlnode!(node::AVLTreeNode{T}, data::T, compare::Function)::AVLTreeNode{T} where T
+  result = compare(data, dataof(node))
   if result < 0
     node.left = delete_avlnode!(left(node), data, compare)
   elseif result > 0
@@ -199,7 +210,7 @@ function delete_avlnode!(node::AVLTreeNode{T}, data::T, compare::Function) where
   else
     if !hasleft(node) || !hasright(node)
       temp = BinaryTreeNil(T)
-      if isnil(left(node))
+      if (temp == left(node))
         temp = right(node)
       else
         temp = left(node)
@@ -212,12 +223,12 @@ function delete_avlnode!(node::AVLTreeNode{T}, data::T, compare::Function) where
         node = temp
       end
     else
-      temp = minValueNode(right(node))
+      temp = minValudNode(right(node))
       node.data = dataof(temp)
       node.right = delete_avlnode!(right(node), dataof(temp), compare)
     end
   end
-  
+
   if isnil(node)
     return node
   end
@@ -228,15 +239,14 @@ end
 
 delete_avlnode!(node::BinaryTreeNil{T}, ::T, ::Function) where T = node
 
-function minValudNode(node::AVLTreeNode)
+function minValudNode(node::Union{AVLTreeNode, BinaryTreeNil})
   current = node
-  while !isnil(left(current))
+  while !isnil(current) && !isnil(left(current))
     current = left(current)
   end
 
   return current
 end
 
-show(io::IO, node::AVLTreeNode) = begin
+show(io::IO, node::AVLTreeNode) = 
   print(io, "(data: $(dataof(node)), left: $(left(node)), right: $(right(node)))")
-end
